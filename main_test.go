@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math/rand"
 	"poivre/listnode"
 	"reflect"
 	"testing"
@@ -72,4 +73,33 @@ func TestAddListNodes(t *testing.T) {
 func addListNodesBruteForce(a, b *listnode.ListNode) *listnode.ListNode {
 	res := a.ToInt() + b.ToInt()
 	return listnode.FromInt(res)
+}
+
+func BenchmarkAddTwoNumbers(b *testing.B) {
+	l1 := listnode.FromInt(rand.Int())
+	l2 := listnode.FromInt(rand.Int())
+
+	b.Run("base", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			addTwoNumbers(l1, l2)
+		}
+	})
+
+	b.Run("codeium", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			addTwoNumbersCodeium(l1, l2)
+		}
+	})
+
+	b.Run("GPT-4", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			addTwoNumbersGPT4(l1, l2)
+		}
+	})
+
+	b.Run("Leetcode", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			addTwoNumbersLeetcode(l1, l2)
+		}
+	})
 }
